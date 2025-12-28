@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Signup</title>
+  <link rel="stylesheet" href="css/style2.css">
+</head>
+<style>
+  .k {
+    width: 100%;
+    height: 100%;
+    background: url("./files/login.jpg") no-repeat center center/cover;
+    filter: blur(0%);
+    filter: contrast(150%);
+  }
+
+  * {
+    color: rgb(45, 179, 172);
+  }
+
+  .container {
+    margin: 150px auto;
+    background: #ac0f0fd0;
+
+  }
+
+  input {
+    background: #175305bd;
+  }
+
+  h1 {
+    margin: 150px 0% 0% 28%;
+  }
+</style>
+
+<body>
+  <div class="k">
+    <h1>
+      <marquee width="60%" direction="left" height="100px">
+        WELCOME TO FIRSTFLIGHT TRAVELS
+      </marquee>
+    </h1>
+    <div class="container">
+      <h2>Sign Up</h2>
+      <form id="signupForm">
+        <input type="text" id="signupFullName" placeholder="Full Name" required>
+        <input type="text" id="signupUsername" placeholder="Username" required>
+        <input type="email" id="signupEmail" placeholder="Email Address" required>
+        <input type="text" id="signupPhone" placeholder="Phone Number" required>
+        <input type="number" id="signupAge" placeholder="Age" required>
+        <input type="password" id="signupPassword" placeholder="Password" required>
+        <button type="submit">Sign Up</button>
+      </form>
+      <p>Already have an account? <a href="index.html">Login</a></p>
+    </div>
+  </div>
+  <script src="static/script.js"></script>
+</body>
+
+</html>
