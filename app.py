@@ -1,7 +1,6 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, redirect
 from flask_cors import CORS
 import sqlite3
-import os
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
@@ -34,32 +33,29 @@ def init_booking_db():
         ''')
 
 @app.route('/')
-def home():
+def home_page():
     return send_from_directory('.', 'index.html')
 
 @app.route('/signup', methods=['POST'])
 def signup():
-    data = request.get_json()
-    username = data['username']
-    password = data['password']
+    username = request.form.get('username')
+    password = request.form.get('password')
     try:
         with sqlite3.connect('users.db') as conn:
             conn.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
-        return jsonify({"status": "success", "message": "Signup successful!"})
+        return send_from_directory('.', 'index.html')
     except sqlite3.IntegrityError:
-        return jsonify({"status": "error", "message": "Username already exists!"})
+        return "Username already exists"
 
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    username = data['username']
-    password = data['password']
+    username = request.form.get('username')
+    password = request.form.get('password')
     with sqlite3.connect('users.db') as conn:
         user = conn.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password)).fetchone()
         if user:
-            return jsonify({"status": "success", "message": f"Welcome {username}!"})
-        else:
-            return jsonify({"status": "error", "message": "Invalid credentials"})
+            return send_from_directory('.', 'home.html')
+        return "Invalid credentials"
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -83,7 +79,7 @@ def submit():
         ''', (name, email, phone, age, gender, departure, return_date, destination_str, package))
         conn.commit()
 
-    return "Registration successful!"
+    return "Registration successful"
 
 @app.route('/delete', methods=['POST'])
 def delete_user():
@@ -96,4 +92,4 @@ def delete_user():
 if __name__ == '__main__':
     init_user_db()
     init_booking_db()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
