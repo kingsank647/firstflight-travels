@@ -6,7 +6,6 @@ import os
 app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 
-# Initialize both databases and tables
 def init_user_db():
     with sqlite3.connect('users.db') as conn:
         conn.execute('''
@@ -34,12 +33,10 @@ def init_booking_db():
             )
         ''')
 
-# Serve the booking form
 @app.route('/')
-def serve_form():
-    return send_from_directory('.', 'book.html')
+def home():
+    return send_from_directory('.', 'index.html')
 
-# Signup route
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
@@ -52,7 +49,6 @@ def signup():
     except sqlite3.IntegrityError:
         return jsonify({"status": "error", "message": "Username already exists!"})
 
-# Login route
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -65,7 +61,6 @@ def login():
         else:
             return jsonify({"status": "error", "message": "Invalid credentials"})
 
-# Booking form submission
 @app.route('/submit', methods=['POST'])
 def submit():
     data = request.form
@@ -90,7 +85,6 @@ def submit():
 
     return "Registration successful!"
 
-# Delete user from booking database
 @app.route('/delete', methods=['POST'])
 def delete_user():
     name_to_delete = request.form.get('name')
@@ -99,7 +93,6 @@ def delete_user():
         conn.commit()
     return f"User '{name_to_delete}' deleted successfully."
 
-# Initialize both DBs and run app
 if __name__ == '__main__':
     init_user_db()
     init_booking_db()
